@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"strings"
+	"strconv"
 
 	"github.com/hashicorp/terraform/helper/acctest"
 	"github.com/hashicorp/terraform/helper/resource"
@@ -15,20 +16,17 @@ import (
 
 func TestAccPapertrailSystem_basic(t *testing.T) {
 	name := fmt.Sprintf("tf-test-%s", acctest.RandString(10))
-	hostname := fmt.Sprintf("%s.hostname.com", acctest.RandString(10))
-	destination_port := 514
+	destination_port := 29504
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPapertrailSystemDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPapertrailSystemConfig(name, hostname, destination_port),
+				Config: testAccPapertrailSystemConfig(name, destination_port),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckSystemExists("papertrail_system.system"),
 					resource.TestCheckResourceAttr("papertrail_system.system", "name", name),
-					resource.TestCheckResourceAttr("papertrail_system.system", "hostname", hostname),
 				),
 			},
 		},
@@ -52,7 +50,7 @@ func testAccCheckSystemExists(n string) resource.TestCheckFunc {
 			return err
 		}
 
-		if system.ID != rs.Primary.ID {
+		if strconv.Itoa(system.ID) != rs.Primary.ID {
 			return fmt.Errorf("Incorrect System ID: %d", system.ID)
 		}
 		return nil
@@ -68,21 +66,20 @@ func testAccCheckPapertrailSystemDestroy(s *terraform.State) error {
 		}
 
 		system, err := conn.GetSystem(rs.Primary.ID)
-		if !strings.Contains(err.Error(), ":Not Found") {
+		if err != nil && !strings.Contains(err.Error(), ":Not Found") {
 			return err
 		}
 
-		if system.ID != "" {
+		if system.ID != 0 {
 			return fmt.Errorf("System exists, ID: %d", system.ID)
 		}
 	}
 	return nil
 }
 
-func testAccPapertrailSystemConfig(name, hostname string, destination_port int) string {
+func testAccPapertrailSystemConfig(name string, destination_port int) string {
 	return fmt.Sprintf(`resource "papertrail_system" "system" {
   name             = "%s"
-  hostname         = "%s"
   destination_port = %d
-}`, name, hostname, destination_port)
+}`, name, destination_port)
 }

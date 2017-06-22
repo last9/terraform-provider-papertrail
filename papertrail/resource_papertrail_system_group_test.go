@@ -19,14 +19,13 @@ func TestAccPapertrailSystemGroup_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPapertrailSystemGroupDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPapertrailSystemGroupConfig(),
 				Check: resource.ComposeTestCheckFunc(
-					testAccCheckSystemGroupExists("papertrail_system_group.sg"),
-					resource.TestCheckResourceAttrSet("papertrail_system_group.sg", "system_id"),
-					resource.TestCheckResourceAttrSet("papertrail_system_group.sg", "group_id"),
+					testAccCheckSystemGroupExists("papertrail_system_group.psg"),
+					resource.TestCheckResourceAttrSet("papertrail_system_group.psg", "system_id"),
+					resource.TestCheckResourceAttrSet("papertrail_system_group.psg", "group_id"),
 				),
 			},
 		},
@@ -93,9 +92,16 @@ func testAccCheckPapertrailSystemGroupDestroy(s *terraform.State) error {
 func testAccPapertrailSystemGroupConfig() string {
 	return fmt.Sprintf(`resource "papertrail_system" "system" {
   name             = "%s"
-  hostname         = "%s"
-  destination_port = 514
+  destination_port = 29504
+}
 
+resource "papertrail_group" "group" {
+  name             = "%s"
+  system_wildcard  = "%s"
+}
 
-}`, acctest.RandString(4), acctest.RandString(4))
+resource "papertrail_system_group" "psg" {
+  system_id        = "${papertrail_system.system.id}"
+  group_id         = "${papertrail_group.group.id}"
+}`, acctest.RandString(4), acctest.RandString(4), acctest.RandString(4))
 }

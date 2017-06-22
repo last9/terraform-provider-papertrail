@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/oogway/goptrail"
+	"strconv"
 )
 
 func TestAccPapertrailGroup_basic(t *testing.T) {
@@ -19,7 +20,6 @@ func TestAccPapertrailGroup_basic(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPapertrailGroupDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPapertrailGroupConfig(name),
@@ -40,7 +40,6 @@ func TestAccPapertrailGroup_with_system_wildcard(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckPapertrailGroupDestroy,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPapertrailGroupConfigWithWildCard(name, wildcard),
@@ -71,7 +70,7 @@ func testAccCheckGroupExists(n string) resource.TestCheckFunc {
 			return err
 		}
 
-		if group.ID != rs.Primary.ID {
+		if strconv.Itoa(group.ID) != rs.Primary.ID {
 			return fmt.Errorf("Incorrect Group ID: %d", group.ID)
 		}
 		return nil
@@ -91,7 +90,7 @@ func testAccCheckPapertrailGroupDestroy(s *terraform.State) error {
 			return err
 		}
 
-		if group.ID != "" {
+		if group.ID != 0 {
 			return fmt.Errorf("Group exists, ID: %d", group.ID)
 		}
 	}
