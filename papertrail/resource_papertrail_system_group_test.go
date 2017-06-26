@@ -3,6 +3,7 @@ package papertrail
 import (
 	"errors"
 	"fmt"
+	"os"
 	"testing"
 
 	"strconv"
@@ -16,12 +17,17 @@ import (
 )
 
 func TestAccPapertrailSystemGroup_basic(t *testing.T) {
+	port := os.Getenv("DESTINATION_PORT")
+	if port == "" {
+		t.Error("'DESTINATION_PORT' ENV var is not set or invalid")
+	}
+
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
-		Providers:    testAccProviders,
+		PreCheck:  func() { testAccPreCheck(t) },
+		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccPapertrailSystemGroupConfig(),
+				Config: testAccPapertrailSystemGroupConfig(port),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckSystemGroupExists("papertrail_system_group.psg"),
 					resource.TestCheckResourceAttrSet("papertrail_system_group.psg", "system_id"),
@@ -89,10 +95,10 @@ func testAccCheckPapertrailSystemGroupDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccPapertrailSystemGroupConfig() string {
+func testAccPapertrailSystemGroupConfig(port string) string {
 	return fmt.Sprintf(`resource "papertrail_system" "system" {
   name             = "%s"
-  destination_port = 29504
+  destination_port = %s
 }
 
 resource "papertrail_group" "group" {
@@ -103,5 +109,5 @@ resource "papertrail_group" "group" {
 resource "papertrail_system_group" "psg" {
   system_id        = "${papertrail_system.system.id}"
   group_id         = "${papertrail_group.group.id}"
-}`, acctest.RandString(4), acctest.RandString(4), acctest.RandString(4))
+}`, acctest.RandString(4), port, acctest.RandString(4), acctest.RandString(4))
 }

@@ -24,3 +24,10 @@ $ make build
 ```
 
 For Usage, have a look at docs in `website` directory.
+
+Running Tests
+-------------
+```sh
+$ cd $GOPATH/src/github.com/oogway/terraform-provider-papertrail/papertrail
+$ PAPERTRAIL_TOKEN=<token> DESTINATION_PORT=<log_destination_port> go tests -v
+```

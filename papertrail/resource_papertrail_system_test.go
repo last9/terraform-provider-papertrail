@@ -3,10 +3,11 @@ package papertrail
 import (
 	"errors"
 	"fmt"
+	"os"
 	"testing"
 
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform/helper/acctest"
 	"github.com/hashicorp/terraform/helper/resource"
@@ -16,11 +17,14 @@ import (
 
 func TestAccPapertrailSystem_basic(t *testing.T) {
 	name := fmt.Sprintf("tf-test-%s", acctest.RandString(10))
-	destination_port := 29504
+	destination_port := os.Getenv("DESTINATION_PORT")
+	if destination_port == "" {
+		t.Error("'DESTINATION_PORT' ENV var is not set or invalid")
+	}
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
-		Providers:    testAccProviders,
+		PreCheck:  func() { testAccPreCheck(t) },
+		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccPapertrailSystemConfig(name, destination_port),
@@ -77,9 +81,9 @@ func testAccCheckPapertrailSystemDestroy(s *terraform.State) error {
 	return nil
 }
 
-func testAccPapertrailSystemConfig(name string, destination_port int) string {
+func testAccPapertrailSystemConfig(name, destination_port string) string {
 	return fmt.Sprintf(`resource "papertrail_system" "system" {
   name             = "%s"
-  destination_port = %d
+  destination_port = %s
 }`, name, destination_port)
 }
