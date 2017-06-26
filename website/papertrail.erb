@@ -1,0 +1,48 @@
+<% wrap_layout :inner do %>
+  <% content_for :sidebar do %>
+    <div class="docs-sidebar hidden-print affix-top" role="complementary">
+      <ul class="nav docs-sidenav">
+        <li<%= sidebar_current("docs-home") %>>
+          <a href="/docs/providers/index.html">All Providers</a>
+        </li>
+
+        <li<%= sidebar_current("docs-papertrail-index") %>>
+          <a href="/docs/providers/papertrail/index.html">Papertrail Provider</a>
+        </li>
+
+        <li<%= sidebar_current("docs-papertrail-datasource") %>>
+          <a href="#">Data Sources</a>
+          <ul class="nav nav-visible">
+            <li<%= sidebar_current("docs-papertrail-datasource-papertrail_user") %>>
+              <a href="/docs/providers/papertrail/d/user.html">papertrail_user</a>
+            </li>
+
+            <li<%= sidebar_current("docs-papertrail-datasource-log_destination") %>>
+              <a href="/docs/providers/papertrail/d/log_destination.html">log_destination</a>
+            </li>
+          </ul>
+        </li>
+
+        <li<%= sidebar_current("docs-papertrail-resource") %>>
+          <a href="#">Resources</a>
+          <ul class="nav nav-visible">
+            <li<%= sidebar_current("docs-papertrail-resource-system") %>>
+              <a href="/docs/providers/papertrail/r/system.html">system</a>
+            </li>
+
+            <li<%= sidebar_current("docs-papertrail-resource-group") %>>
+              <a href="/docs/providers/papertrail/r/group.html">group</a>
+            </li>
+
+            <li<%= sidebar_current("docs-papertrail-resource-system_group") %>>
+              <a href="/docs/providers/papertrail/r/system_group.html">system_group</a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+  <% end %>
+
+  <%= yield %>
+  <% end %>
