@@ -20,7 +20,8 @@ Enter the provider directory and build the provider
 
 ```sh
 $ cd $GOPATH/src/github.com/oogway/terraform-provider-papertrail
-$ make build
+$ go get
+$ go build
 ```
 
 For Usage, have a look at docs in `website` directory.
