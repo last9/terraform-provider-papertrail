@@ -23,6 +23,7 @@ func Provider() terraform.ResourceProvider {
 			"papertrail_system":       resourcePapertrailSystem(),
 			"papertrail_group":        resourcePapertrailGroup(),
 			"papertrail_system_group": resourcePapertrailSystemGroup(),
+			"papertrail_search":       resourcePapertrailSearch(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"papertrail_user":            dataSourcePapertrailUser(),
