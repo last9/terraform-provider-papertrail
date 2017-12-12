@@ -173,6 +173,59 @@ func (c *DefaultClient) RemoveSystemFromGroup(sID, gID string) error {
 	return c.execute("POST", path, params, &out)
 }
 
+func (c *DefaultClient) CreateSearch(s Search) (Search, error) {
+	params := parseSearchParams(s)
+	out := Search{}
+
+	err := c.execute("POST", "/searches", params, &out)
+	return out, err
+}
+
+func (c *DefaultClient) GetSearch(id string) (Search, error) {
+	out := Search{}
+	params := defaultParams()
+	path := fmt.Sprintf("/searches/%s", id)
+
+	if err := c.execute("GET", path, params, &out); err != nil {
+		return out, err
+	}
+
+	return out, nil
+}
+
+func (c *DefaultClient) ListSearch() ([]Search, error) {
+	out := []Search{}
+	params := defaultParams()
+
+	err := c.execute("GET", "/searches", params, &out)
+
+	return out, err
+}
+
+func (c *DefaultClient) UpdateSearch(s Search) error {
+	params := parseSearchParams(s)
+	var out interface{}
+	path := fmt.Sprintf("/searches/%v", s.ID)
+
+	return c.execute("PUT", path, params, &out)
+}
+
+func (c *DefaultClient) DeleteSearch(id string) error {
+	var out interface{}
+	params := defaultParams()
+	path := fmt.Sprintf("/searches/%s", id)
+
+	return c.execute("DELETE", path, params, &out)
+}
+
+func parseSearchParams(s Search) map[string]string {
+	params := defaultParams()
+	params["search[name]"] = s.Name
+	params["search[query]"] = s.Query
+	params["search[group_id]"] = strconv.Itoa(s.Group.ID)
+	return params
+}
+
 func (c *DefaultClient) execute(method, path string, reqParams map[string]string, respBody interface{}) error {
 	req, err := http.NewRequest(method, fmt.Sprintf("%s%s", c.netLoc, path), nil)
 	if err != nil {

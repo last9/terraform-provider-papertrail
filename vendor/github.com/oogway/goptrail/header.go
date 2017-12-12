@@ -12,11 +12,25 @@ type Client interface {
 	UnregisterSystem(id string) error
 	AddSystemToGroup(sID, gID string) error
 	RemoveSystemFromGroup(sID, gID string) error
+
 	CreateGroup(g Group) (Group, error)
 	GetGroup(id string) (Group, error)
 	ListGroups() ([]Group, error)
 	UpdateGroup(g Group) error
 	DeleteGroup(id string) error
+
+	CreateSearch(s Search) (Search, error)
+	GetSearch(id string) (Search, error)
+	ListSearch() ([]Search, error)
+	UpdateSearch(s Search) error
+	DeleteSearch(id string) error
+}
+
+type Search struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Query string `json:"query"`
+	Group Group  `json:"group"`
 }
 
 type Group struct {
