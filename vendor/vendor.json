@@ -465,16 +465,28 @@
 			"revisionTime": "2017-05-08T17:38:06Z"
 		},
 		{
-			"checksumSHA1": "/vs3M7fEbXCrfx+Bdd94abnxJWk=",
+			"checksumSHA1": "cv7vof1G75ydovYbb8EARDd4FH4=",
 			"path": "github.com/oogway/goptrail",
-			"revision": "b93c2f9f816063f17b9323e601deed21648f58f3",
-			"revisionTime": "2017-04-21T18:38:29Z"
+			"revision": "a1597dd3a24c734b9dfe91146f6f8960933d2b87",
+			"revisionTime": "2017-12-09T08:54:43Z"
+		},
+		{
+			"checksumSHA1": "ET/qgGVknzZw+EENbjfznVvV9N0=",
+			"path": "github.com/pkg/errors",
+			"revision": "8842a6e0cc595d1cc9d931f6c875883967280e32",
+			"revisionTime": "2017-12-10T02:24:16Z"
 		},
 		{
 			"checksumSHA1": "zmC8/3V4ls53DJlNTKDZwPSC/dA=",
 			"path": "github.com/satori/go.uuid",
 			"revision": "5bf94b69c6b68ee1b541973bb8e1144db23a194b",
 			"revisionTime": "2017-03-21T23:07:31Z"
+		},
+		{
+			"checksumSHA1": "0V9YhjDv2UlkQaAbSK41fzlx3JA=",
+			"path": "github.com/sethgrid/pester",
+			"revision": "760f8913c0483b776294e1bee43f1d687527127b",
+			"revisionTime": "2017-11-27T02:50:28Z"
 		},
 		{
 			"checksumSHA1": "UWjVYmoHlIfHzVIskELHiJQtMOI=",
