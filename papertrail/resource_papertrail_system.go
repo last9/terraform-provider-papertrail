@@ -21,10 +21,6 @@ func resourcePapertrailSystem() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Schema: map[string]*schema.Schema{
-			"id": {
-				Type:     schema.TypeInt,
-				Computed: true,
-			},
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
